@@ -1,6 +1,6 @@
 {
   "name": "angular-nextprot-help",
-  "version": "0.11.1",
+  "version": "0.10.1",
   "homepage": "https://github.com/calipho-sib/nextprot-ui-help",
   "authors": [
     "calipho <ndu@isb-sib.ch>"
@@ -41,12 +41,11 @@
     "angular-mocks": "latest"
   },
   "_cacheHeaders": {
-    "ETag": "\"0796b2aa1ee43f9d90a3572d936abaa25d3824d3\"",
-    "Content-Length": "492257",
+    "ETag": "\"0adce73778a40b9f454512923f4b2b197fc31232\"",
     "Content-Type": "application/x-gzip",
-    "Content-Disposition": "attachment; filename=calipho-sib-nextprot-ui-help-0796b2a.tar.gz"
+    "Content-Disposition": "attachment; filename=calipho-sib-nextprot-ui-help-0adce73.tar.gz"
   },
-  "_release": "e-tag:0796b2aa1",
+  "_release": "e-tag:0adce7377",
   "_source": "https://github.com/calipho-sib/nextprot-ui-help/tarball/master",
   "_target": "*",
   "_originalSource": "https://github.com/calipho-sib/nextprot-ui-help/tarball/master"

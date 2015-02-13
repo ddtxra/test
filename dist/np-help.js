@@ -122,7 +122,7 @@
     //
     ng.module('npHelp')
         .factory('rdfHelp', rdfHelp)
-        .factory('gitHubContent', gitHubContent)
+        .factory('gitHubContent', gitHubContent) 
 
 
 
@@ -145,7 +145,7 @@
         .replace(/-+/g, '-'); // collapse dashes
 
       return str;
-    };
+    };        
 
     //
     // simple function to strLeftBack in javascript
@@ -159,10 +159,10 @@
     //
     // factory rdfHelp, is a simple wrapper to load JSON data
     rdfHelp.$inject=['$resource','$q','settings'];
-    function rdfHelp($resource, $q, settings) {
+    function rdfHelp($resource, $q, settings) {        
         var Help=function(){
             this.$dao={
-                rdfHelp:$resource((settings.baseUrl||'') + settings.helpPath)
+                rdfHelp:$resource((settings.baseUrl||'') + settings.helpPath)   
             }
 
             this.ready=false;
@@ -176,13 +176,13 @@
             var self=this;
 
             // is emtpy
-            if(!this.ready){
+            if(!this.ready){                
                 this.$promise=self.$dao.rdfHelp.query().$promise;
 
                 this.$promise.then(function (data) {
                     angular.extend(self,data);
                     self.ready=true;
-                });
+                }); 
             }
             return this;
         }
@@ -279,10 +279,7 @@
               githubToken='access_token='+settings.githubToken
 
               // Go fetch the GitHub tree with references to our Markdown content blobs
-              var apiUrl = markdownRepo + '/git/trees/master?recursive=1';
-              if((settings.githubToken) && (settings.githubToken != null)){
-                apiUrl += '&'+githubToken;
-              }
+              var apiUrl = markdownRepo + '/git/trees/master?recursive=1'+'&'+githubToken;
 
               // $http.get('/proxy?url=' + encodeURIComponent(apiUrl) + '&cache=1&ttl=600').success(function(data) {
               $http.get(apiUrl).success(function(data) {
@@ -375,13 +372,13 @@
         //  - from github repository
         //  - from dynamic content
         //  - from static content
-        .directive("markdown", ['$compile', '$http', '$parse', '$sce','gitHubContent',
+        .directive("markdown", ['$compile', '$http', '$parse', '$sce','gitHubContent', 
           function ($compile, $http, $parse, $sce, gitHubContent) {
             //
             // load markdown converter
             var converter = new Showdown.converter();
             //
-            // insert html in element and perform some UI tweaks
+            // insert html in element and perform some UI tweaks 
             function loadHtml(element, html){
                 try{element.html(html)}catch(e){}
 
@@ -414,7 +411,7 @@
                                 element.html(converter.makeHtml(data.data));
                             },function(data){
                                 //
-                                // silently quit on error
+                                // silently quit on error 
                                 if(opts.silent){
                                     return element.hide();
                                 }
@@ -424,8 +421,8 @@
                         });
 
                         //
-                        // convert markdown from attribut
-                    } else if (attrs.markdownContent){
+                        // convert markdown from attribut 
+                    } else if (attrs.markdownContent){                        
                         attrs.$observe('markdownContent', function(md) {
                             loadHtml(element,converter.makeHtml(md))
                         });
@@ -438,7 +435,7 @@
                             gitHubContent.loadSlug(markdownArticle).then(function(content) {
                               loadHtml(element,$sce.trustAsHtml(converter.makeHtml(content)).toString());
                             });
-                        })
+                        })                        
                     } else {
                         //
                         // else convert markdown from static text
@@ -450,20 +447,18 @@
         }])
 
         //
-        // edit on github on click
+        // edit on github on click 
         .directive('editMarkdown', ['gitHubContent','settings',function (gitHubContent, settings) {
             var github='http://github.com/',opts='';
             return {
                 restrict: 'A',
                 link: function (scope, element, attr, ctrl) {
                     element.click(function(){
-                        if(settings.zenEdit)opts='#fullscreen_blob_contents';
-                        gitHubContent.contentIndex().then(function(index) {
-                            var article = gitHubContent.find(attr.editMarkdown);
-                            if(settings.githubEditPage){
-                              window.location.href=settings.githubEditPage+article.gitPath+opts
-                            } else window.location.href=github+settings.githubRepo+'/edit/master/'+article.gitPath+opts
-                        });
+                        if(settings.zenEdit)opts='#fullscreen_blob_contents';                        
+                        gitHubContent.contentIndex().then(function(index) {            
+                            var article = gitHubContent.find(attr.editMarkdown);            
+                            window.location.href=github+settings.githubRepo+'/edit/master/'+article.gitPath+opts
+                        });                        
                     })
                 }
             };
@@ -481,12 +476,13 @@
                     type=type.toLowerCase()
                 return type;
             };
-        }]);
+        }]);        
 
 
 })(angular);
 
 angular.module('npHelp').run(['$templateCache', function ($templateCache) {
-	$templateCache.put('html/np-help.doc.html', '<div ng-controller="DocCtrl"> <markdown markdown-article="{{article}}"></markdown> <div class="clearfix edit-gh-page"> <hr/> <button class="btn btn-primary pull-right" edit-markdown="{{article}}">Improve this page</button> </div> </div> ');
+	$templateCache.put('html/np-help.doc.html', '<div ng-controller="DocCtrl"> <markdown markdown-article="{{article}}"></markdown> <div class="clearfix"> <hr/> <button class="btn btn-primary pull-right " edit-markdown="{{article}}">Improve this page</button> </div> </div>');
 	$templateCache.put('html/np-help.element.html', '<div class="row offset1"> <div class="row"> <section id="{{entity.typeName}}"> <h2> {{entity.typeName|cleanType}}  <div ng-if="entity.values.length> 0" class="btn-group"> <button class="btn dropdown-toggle" data-toggle="dropdown">Values<span class="caret"></span> </button> <ul class="dropdown-menu"> <li ng-repeat="value in entity.values"><a href="">{{value}}</a></li> </ul> </div> <span class="badge badge-info">{{entity.instanceCount}}</span> </h2> <blockquote> {{entity.rdfsComment}} </blockquote> <div class="row"> <div class="col-xs-12 col-md-5 vertical-middle "> <div ng-repeat="parent in entity.parentTriples | filter : rdfHelp.triples.predicate"> <p><code><a ng-href="{{hrefBuild(\'entity/\'+parent.subjectType)}}" class="text-info">{{parent.subjectType}}</a></code> &nbsp; <code class="text-warning">{{parent.predicate}}</code></span> </p> </div> </div> <div class="col-xs-12 col-md-7 form-inline"> <div class="panel panel-default"> <div class="panel-heading"><h5 class="text-center">{{entity.typeName}}</h5></div> <div class="panel-body"> <div ng-repeat="t in entity.triples | filter : rdfHelp.triples.predicate"> <code class="text-warning">{{t.predicate}}</code> <code><a class="text-success" ng-href="{{hrefBuild(\'entity/\'+t.objectType)}}">{{t.objectType}}</a></code> &nbsp; <span class="label label-info">{{t.tripleCount}}</span> <select ng-if="t.literalType && t.values.length> 1" class="form-control"> <option ng-repeat="value in t.values" value="{{value}}">{{value}}</option> </select> <input ng-if="t.literalType && t.values.length==1" type="text" placeholder="{{t.values[0]}}" class="form-control"></input> </div> </div> </div> </div> </div> <div class="bs-docs-example"> <div ng-repeat="t in entity.triples | filter : rdfHelp.triples.predicate"> <code class="text-info">{{t.tripleSample}}</code> </div> </div> <div class="bs-docs-example"> <div ng-repeat="path in entity.pathToOrigin"> <code class="text-info">{{path}} ?statement</code> </div> </div> </section> </div> </div>');
+	$templateCache.put('html/np-help.toc.html', '<ul class="nav nav-sidebar"> <li><h5>{{settings.helpTitle}}</h5></li> <li ng-repeat="article in docArticles" ng-class="{\'active\':isActiveDoc(article.urlPath)}"><a ng-href="{{article.urlPath}}">{{article.title}}</a></li> <li><h5>RDF Entities</h5></li> <li ng-repeat="rh in rdfHelp | filter : rdfHelp.triples.predicate" ng-class="{\'active\':isActiveElement(rh.typeName)}")> <a ng-href="{{hrefBuild(\'entity/\'+rh.typeName)}}"> <i class="icon-chevron-right"></i>{{rh.typeName|cleanType}} ({{rh.instanceCount}}) </a> </li> </ul> ');
 }]);
