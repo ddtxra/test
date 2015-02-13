@@ -1,0 +1,53 @@
+{
+  "name": "angular-nextprot-help",
+  "version": "0.11.1",
+  "homepage": "https://github.com/calipho-sib/nextprot-ui-help",
+  "authors": [
+    "calipho <ndu@isb-sib.ch>"
+  ],
+  "description": "help module for nextprot",
+  "main": [
+    "dist/np-help.js",
+    "dist/np-help.css"
+  ],
+  "keywords": [
+    "help",
+    "angular"
+  ],
+  "license": "GPL",
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "test",
+    "demo",
+    "src",
+    "tests"
+  ],
+  "overrides": {
+    "showdown": {
+      "main": "src/showdown.js"
+    }
+  },
+  "dependencies": {
+    "angular": "~1",
+    "angular-route": "~1",
+    "angular-sanitize": "~1",
+    "angular-resource": "~1",
+    "showdown": "~0.3.1",
+    "bootstrap": "~3.2.0",
+    "underscore": "~1.7.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "latest"
+  },
+  "_cacheHeaders": {
+    "ETag": "\"0796b2aa1ee43f9d90a3572d936abaa25d3824d3\"",
+    "Content-Length": "492257",
+    "Content-Type": "application/x-gzip",
+    "Content-Disposition": "attachment; filename=calipho-sib-nextprot-ui-help-0796b2a.tar.gz"
+  },
+  "_release": "e-tag:0796b2aa1",
+  "_source": "https://github.com/calipho-sib/nextprot-ui-help/tarball/master",
+  "_target": "*",
+  "_originalSource": "https://github.com/calipho-sib/nextprot-ui-help/tarball/master"
+}
